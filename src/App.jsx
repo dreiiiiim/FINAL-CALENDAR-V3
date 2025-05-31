@@ -1,23 +1,10 @@
-import { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { supabase } from './Components/client';
-import Welcomepage from './Components/Welcomepage';
-import MonthlyCalendar from './Components/MonthlyCalendar';
-import AuthRedirect from './Components/AuthRedirect';
+import React from "react";
+import MonthlyCalendar from "./Components/MonthlyCalendar";
+import Welcomepage from "./Components/Welcomepage";
+import AuthRedirect from "./Components/AuthRedirect";
+import { Routes, Route } from "react-router-dom";
 
-function App() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN') {
-        navigate('/MonthlyCalendar');
-      }
-    });
-
-    return () => listener.subscription.unsubscribe();
-  }, [navigate]);
-
+const App = () => {
   return (
     <div className="h-screen w-screen">
       <Routes>
@@ -27,6 +14,6 @@ function App() {
       <AuthRedirect />
     </div>
   );
-}
+};
 
 export default App;
