@@ -50,14 +50,33 @@ const LoginModal = ({ onClose, onSwitchToSignup }) => {
      });
    }
 
-   async function handleGoogleSignIn() {
+//    async function handleGoogleSignIn() {
+//   setError(null);
+//   setLoading(true);
+//   try {
+//     const { error } = await supabase.auth.signInWithOAuth({
+//       provider: "google",
+//       options: {
+//         redirectTo: `${window.location.origin}/MonthlyCalendar`, // or '/calendar'
+//       },
+//     });
+//     if (error) throw error;
+//   } catch (err) {
+//     setError(err.message);
+//   } finally {
+//     setLoading(false);
+//   }
+// }
+
+async function handleGoogleSignIn() {
   setError(null);
   setLoading(true);
   try {
+    const redirectPath = `${window.location.origin}/FINAL-CALENDAR-V3/#/MonthlyCalendar`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/MonthlyCalendar`, // or '/calendar'
+        redirectTo: redirectPath,
       },
     });
     if (error) throw error;
