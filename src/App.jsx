@@ -1,11 +1,11 @@
-// App.jsx
 import React, { useEffect } from "react";
 import MonthlyCalendar from "./Components/MonthlyCalendar";
 import Welcomepage from "./Components/Welcomepage";
 import AuthRedirect from "./Components/AuthRedirect";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, HashRouter as Router } from "react-router-dom";
 import { supabase } from "./Components/client";
 import './index.css';
+
 const App = () => {
   const navigate = useNavigate();
 
@@ -20,14 +20,15 @@ const App = () => {
   }, [navigate]);
 
   return (
-    <div className='h-screen w-screen'>
-      <Routes>
-        <Route path='/' element={<Welcomepage />} />
-        <Route path='/MonthlyCalendar' element={<MonthlyCalendar />} />
-      </Routes>
-
-      <AuthRedirect />
-    </div>
+    <Router>
+      <div className='h-screen w-screen'>
+        <Routes>
+          <Route path='/' element={<Welcomepage />} />
+          <Route path='/MonthlyCalendar' element={<MonthlyCalendar />} />
+          <Route path='*' element={<AuthRedirect />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
