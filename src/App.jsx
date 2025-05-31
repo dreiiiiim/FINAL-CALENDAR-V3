@@ -3,7 +3,7 @@ import MonthlyCalendar from "./Components/MonthlyCalendar";
 import Welcomepage from "./Components/Welcomepage";
 import AuthRedirect from "./Components/AuthRedirect";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { supabase } from "./supabaseClient";
+import { supabase } from "./Components/client";
 
 const App = () => {
   const navigate = useNavigate();
