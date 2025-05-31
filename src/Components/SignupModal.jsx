@@ -67,7 +67,6 @@ const SignupModal = ({ onClose, onSwitchToLogin }) => {
       return newFormData;
     });
   }
-<<<<<<< HEAD
 
   async function handleGoogleSignIn() {
     setError(null);
@@ -91,29 +90,8 @@ const SignupModal = ({ onClose, onSwitchToLogin }) => {
       setError(err.message);
     } finally {
       setLoading(false);
-=======
-async function handleGoogleSignIn() {
-  setError(null);
-  setLoading(true);
-  try {
-    const redirectPath = `${window.location.origin}/FINAL-CALENDAR-V3/#/MonthlyCalendar`;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: redirectPath,
-      },
-    });
-    if (error) {
-      setError(error.message);
->>>>>>> 13dc89f7ca6cd236edfa6a43adf009c258425ef4
     }
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
   }
-}
-
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">

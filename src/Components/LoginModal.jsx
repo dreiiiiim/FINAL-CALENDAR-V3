@@ -77,13 +77,10 @@ async function handleGoogleSignIn() {
       provider: "google",
       options: {
         redirectTo: redirectPath,
-<<<<<<< HEAD
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
         },
-=======
->>>>>>> 13dc89f7ca6cd236edfa6a43adf009c258425ef4
       },
     });
     if (error) throw error;

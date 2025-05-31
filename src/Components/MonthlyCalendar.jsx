@@ -107,69 +107,77 @@ const MonthlyCalendar = () => {
   };
 
   const handleSaveEvent = async (event) => {
-  try {
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (userError || !user) {
-      console.error('Must be logged in to save events');
-      return;
+    try {
+      // First check localStorage for session
+      const storedSession = localStorage.getItem('supabase.auth.token');
+      if (!storedSession) {
+        console.error('No session found in localStorage');
+        return;
+      }
+
+      // Then verify with Supabase
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        console.error('Must be logged in to save events');
+        return;
+      }
+
+      // Normalize date: ensure it's a string in YYYY-MM-DD format
+      let formattedDate = event.date;
+      if (event.date instanceof Date) {
+        const year = event.date.getFullYear();
+        const month = String(event.date.getMonth() + 1).padStart(2, '0');
+        const day = String(event.date.getDate()).padStart(2, '0');
+        formattedDate = `${year}-${month}-${day}`;
+      }
+
+      if (selectedEvent) {
+        // Update existing event
+        const { error: updateError } = await supabase
+          .from('events')
+          .update({
+            title: event.title,
+            description: event.description,
+            date: formattedDate,
+            time: event.time,
+            color: event.color,
+            priority: event.priority
+          })
+          .eq('id', selectedEvent.id);
+
+        if (updateError) throw updateError;
+
+        setEvents(prev =>
+          prev.map(e => e.id === selectedEvent.id
+            ? { ...event, id: selectedEvent.id, date: formattedDate }
+            : e)
+        );
+      } else {
+        // Insert new event
+        const { data: newData, error: insertError } = await supabase
+          .from('events')
+          .insert({
+            user_id: user.id,
+            title: event.title,
+            description: event.description,
+            date: formattedDate,
+            time: event.time,
+            color: event.color,
+            priority: event.priority
+          })
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+
+        setEvents(prev => [...prev, { ...newData, date: formattedDate }]);
+      }
+
+      setShowEventModal(false);
+    } catch (error) {
+      console.error('Error saving event:', error.message);
     }
-
-    // Normalize date: ensure it's a string in YYYY-MM-DD format
-    let formattedDate = event.date;
-    if (event.date instanceof Date) {
-      const year = event.date.getFullYear();
-      const month = String(event.date.getMonth() + 1).padStart(2, '0');
-      const day = String(event.date.getDate()).padStart(2, '0');
-      formattedDate = `${year}-${month}-${day}`;
-    }
-
-    if (selectedEvent) {
-      // Update existing event
-      const { error: updateError } = await supabase
-        .from('events')
-        .update({
-          title: event.title,
-          description: event.description,
-          date: formattedDate,
-          time: event.time,
-          color: event.color,
-          priority: event.priority
-        })
-        .eq('id', selectedEvent.id);
-
-      if (updateError) throw updateError;
-
-      setEvents(prev =>
-        prev.map(e => e.id === selectedEvent.id
-          ? { ...event, id: selectedEvent.id, date: formattedDate }
-          : e)
-      );
-    } else {
-      // Insert new event
-      const { data: newData, error: insertError } = await supabase
-        .from('events')
-        .insert({
-          user_id: user.id,
-          title: event.title,
-          description: event.description,
-          date: formattedDate,
-          time: event.time,
-          color: event.color,
-          priority: event.priority
-        })
-        .select()
-        .single();
-
-      if (insertError) throw insertError;
-
-      setEvents(prev => [...prev, { ...newData, date: formattedDate }]);
-    }
-
-    setShowEventModal(false);
-  } catch (error) {
-    console.error('Error saving event:', error.message);
-  }
-};
+  };
 
 
   const handleDeleteEvent = async (eventToDelete) => {
