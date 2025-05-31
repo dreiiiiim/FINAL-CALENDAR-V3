@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MonthlyCalendar from "./Components/MonthlyCalendar";
 import Welcomepage from "./Components/Welcomepage";
 import AuthRedirect from "./Components/AuthRedirect";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { supabase } from "./supabaseClient";
 
 const App = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data?.session) {
+        navigate("/MonthlyCalendar");
+      }
+    };
+    checkSession();
+  }, [navigate]);
+
   return (
     <div className="h-screen w-screen">
       <Routes>
