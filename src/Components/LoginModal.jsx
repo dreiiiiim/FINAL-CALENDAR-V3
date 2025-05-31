@@ -29,14 +29,20 @@ const LoginModal = ({ onClose, onSwitchToSignup }) => {
        });
 
        if (error) throw error;
+       
+       // Store the session in localStorage
+       if (data.session) {
+         localStorage.setItem('supabase.auth.token', JSON.stringify(data.session));
+       }
+       
        console.log('Logged in successfully:', data);
-    navigate('/MonthlyCalendar'); 
-  } catch (error) {
-    console.error('Error logging in:', error.message);
-    setError(error.message);
-  } finally {
-    setLoading(false);
-  }
+       navigate('MonthlyCalendar');
+     } catch (error) {
+       console.error('Error logging in:', error.message);
+       setError(error.message);
+     } finally {
+       setLoading(false);
+     }
    }
    
    function handleChange(event) {
@@ -51,22 +57,33 @@ const LoginModal = ({ onClose, onSwitchToSignup }) => {
    }
 
    async function handleGoogleSignIn() {
-  setError(null);
-  setLoading(true);
-  try {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/MonthlyCalendar`, // or '/calendar'
-      },
-    });
-    if (error) throw error;
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-}
+     setError(null);
+     setLoading(true);
+     try {
+       const redirectPath = `${window.location.origin}/FINAL-CALENDAR-V3/#/MonthlyCalendar`;
+       const { data, error } = await supabase.auth.signInWithOAuth({
+         provider: "google",
+         options: {
+           redirectTo: redirectPath,
+           queryParams: {
+             access_type: 'offline',
+             prompt: 'consent',
+           },
+         },
+       });
+
+       if (error) throw error;
+       
+       // Store the session in localStorage if available
+       if (data?.session) {
+         localStorage.setItem('supabase.auth.token', JSON.stringify(data.session));
+       }
+     } catch (err) {
+       setError(err.message);
+     } finally {
+       setLoading(false);
+     }
+   }
 
    return (
      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
