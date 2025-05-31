@@ -67,24 +67,27 @@ const SignupModal = ({ onClose, onSwitchToLogin }) => {
       return newFormData;
     });
   }
-
-  async function handleGoogleSignIn() {
-    setError(null);
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-      });
-
-      if (error) {
-        setError(error.message);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+async function handleGoogleSignIn() {
+  setError(null);
+  setLoading(true);
+  try {
+    const redirectPath = `${window.location.origin}/FINAL-CALENDAR-V3/#/MonthlyCalendar`;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: redirectPath,
+      },
+    });
+    if (error) {
+      setError(error.message);
     }
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
