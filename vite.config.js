@@ -8,5 +8,5 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     react()],
-    base: "/FINAL-CALENDAR-V3",
+    base: "/FINAL-CALENDAR-V3/",
 })
