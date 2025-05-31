@@ -478,128 +478,128 @@ const MonthlyCalendar = () => {
       .slice(0, 5); // Show max 5 todos
 
     return (
-  <div className="relative h-full"> {/* Make container relative for absolute children */}
-      <div className="mt-4 p-4 text-white overflow-y-auto" style={{ maxHeight: 'calc(100vh - 300px)' }}>
-        {/* Upcoming Events Section */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2 border-b border-gray-700 pb-1 flex justify-between items-center">
-            <span>Upcoming Events</span>
-            <span className="text-xs font-normal text-gray-400">
-              {upcomingEvents.length} {upcomingEvents.length === 1 ? 'event' : 'events'}
-            </span>
-          </h3>
-          {upcomingEvents.length > 0 ? (
-            <div className="space-y-3">
-              {upcomingEvents.map((event, index) => {
-                const eventDate = new Date(event.date);
-                const isTodayEvent = eventDate.toDateString() === today.toDateString();
-                
-                return (
-                  <div 
-                    key={index} 
-                    className="text-sm p-2 bg-dark-black rounded hover:bg-gray-700 cursor-pointer"
-                    onClick={() => {
-                      // Set the date to event's date and switch to day view
-                      updateDateValues(eventDate);
-                      setViewMode("day");
-                    }}
-                  >
-                    <div className="flex items-start">
-                      <div 
-                        className="w-3 h-3 rounded-full mt-1 mr-2 flex-shrink-0" 
-                        style={{ backgroundColor: event.color }}
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium">{event.title}</div>
-                        <div className="text-xs text-gray-400 flex items-center mt-1">
-                          <span>
-                            {isTodayEvent ? 'Today' : eventDate.toLocaleDateString('default', { weekday: 'short', month: 'short', day: 'numeric' })}
-                            {event.time && ` • ${event.time}`}
-                          </span>
-                          {event.priority && (
-                            <span className={`ml-2 px-1 py-0.5 rounded text-xs ${
-                              event.priority === "high" ? "bg-red-900 text-red-100" :
-                              event.priority === "medium" ? "bg-yellow-900 text-yellow-100" :
-                              "bg-green-900 text-green-100"
-                            }`}>
-                              {event.priority}
+      <div className="relative h-full"> {/* Make container relative for absolute children */}
+        <div className="mt-4 p-4 text-white overflow-y-auto" style={{ maxHeight: 'calc(100vh - 300px)' }}>
+          {/* Upcoming Events Section */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold mb-2 border-b border-gray-700 pb-1 flex justify-between items-center">
+              <span>Upcoming Events</span>
+              <span className="text-xs font-normal text-gray-400">
+                {upcomingEvents.length} {upcomingEvents.length === 1 ? 'event' : 'events'}
+              </span>
+            </h3>
+            {upcomingEvents.length > 0 ? (
+              <div className="space-y-3">
+                {upcomingEvents.map((event, index) => {
+                  const eventDate = new Date(event.date);
+                  const isTodayEvent = eventDate.toDateString() === today.toDateString();
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className="text-sm p-2 bg-dark-black rounded hover:bg-gray-700 cursor-pointer"
+                      onClick={() => {
+                        // Set the date to event's date and switch to day view
+                        updateDateValues(eventDate);
+                        setViewMode("day");
+                      }}
+                    >
+                      <div className="flex items-start">
+                        <div 
+                          className="w-3 h-3 rounded-full mt-1 mr-2 flex-shrink-0" 
+                          style={{ backgroundColor: event.color }}
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium">{event.title}</div>
+                          <div className="text-xs text-gray-400 flex items-center mt-1">
+                            <span>
+                              {isTodayEvent ? 'Today' : eventDate.toLocaleDateString('default', { weekday: 'short', month: 'short', day: 'numeric' })}
+                              {event.time && ` • ${event.time}`}
                             </span>
-                          )}
+                            {event.priority && (
+                              <span className={`ml-2 px-1 py-0.5 rounded text-xs ${
+                                event.priority === "high" ? "bg-red-900 text-red-100" :
+                                event.priority === "medium" ? "bg-yellow-900 text-yellow-100" :
+                                "bg-green-900 text-green-100"
+                              }`}>
+                                {event.priority}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-sm text-gray-400 italic">No upcoming events</div>
-          )}
-        </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-400 italic">No upcoming events</div>
+            )}
+          </div>
 
-        {/* To-Do List Section */}
-        <div>
-          <h3 className="text-lg font-semibold mb-2 border-b border-gray-700 pb-1 flex justify-between items-center">
-            <span>To-Do List</span>
-            <span className="text-xs font-normal text-gray-400">
-              {incompleteTodos.length} {incompleteTodos.length === 1 ? 'task' : 'tasks'}
-            </span>
-          </h3>
-          {incompleteTodos.length > 0 ? (
-            <div className="space-y-3">
-              {incompleteTodos.map((todo, index) => {
-                const todoDate = todo.date ? new Date(todo.date) : null;
-                const isTodayTodo = todoDate && todoDate.toDateString() === today.toDateString();
-                
-                return (
-                  <div 
-                    key={index} 
-                    className="text-sm p-2 bg-dark-black rounded hover:bg-gray-700 flex items-start"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={() => handleToggleTodo(todo)}
-                      className="mt-1 mr-2 flex-shrink-0"
-                    />
-                    <div className="flex-1">
-                      <div className="font-medium">{todo.title}</div>
-                      <div className="text-xs text-gray-400 flex items-center mt-1">
-                        {todoDate && (
-                          <span>
-                            {isTodayTodo ? 'Today' : todoDate.toLocaleDateString('default', { weekday: 'short', month: 'short', day: 'numeric' })}
-                          </span>
-                        )}
-                        <span className={`ml-2 px-1 py-0.5 rounded text-xs ${
-                          todo.priority === "high" ? "bg-red-900 text-red-100" :
-                          todo.priority === "medium" ? "bg-yellow-900 text-yellow-100" :
-                          "bg-green-900 text-green-100"
-                        }`}>
-                          {todo.priority}
-                        </span>
-                      </div>
-                    </div>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteTodo(todo);
-                      }}
-                      className="ml-2 text-gray-400 hover:text-red-400"
+          {/* To-Do List Section */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2 border-b border-gray-700 pb-1 flex justify-between items-center">
+              <span>To-Do List</span>
+              <span className="text-xs font-normal text-gray-400">
+                {incompleteTodos.length} {incompleteTodos.length === 1 ? 'task' : 'tasks'}
+              </span>
+            </h3>
+            {incompleteTodos.length > 0 ? (
+              <div className="space-y-3">
+                {incompleteTodos.map((todo, index) => {
+                  const todoDate = todo.date ? new Date(todo.date) : null;
+                  const isTodayTodo = todoDate && todoDate.toDateString() === today.toDateString();
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className="text-sm p-2 bg-dark-black rounded hover:bg-gray-700 flex items-start"
                     >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-sm text-gray-400 italic">No pending tasks</div>
-          )}
+                      <input
+                        type="checkbox"
+                        checked={todo.completed}
+                        onChange={() => handleToggleTodo(todo)}
+                        className="mt-1 mr-2 flex-shrink-0"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium">{todo.title}</div>
+                        <div className="text-xs text-gray-400 flex items-center mt-1">
+                          {todoDate && (
+                            <span>
+                              {isTodayTodo ? 'Today' : todoDate.toLocaleDateString('default', { weekday: 'short', month: 'short', day: 'numeric' })}
+                            </span>
+                          )}
+                          <span className={`ml-2 px-1 py-0.5 rounded text-xs ${
+                            todo.priority === "high" ? "bg-red-900 text-red-100" :
+                            todo.priority === "medium" ? "bg-yellow-900 text-yellow-100" :
+                            "bg-green-900 text-green-100"
+                          }`}>
+                            {todo.priority}
+                          </span>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTodo(todo);
+                        }}
+                        className="ml-2 text-gray-400 hover:text-red-400"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-400 italic">No pending tasks</div>
+            )}
+          </div>
         </div>
-    <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700 bg-dark-black">
-              <UserIcon />
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700 bg-dark-black">
+          <UserIcon />
         </div>
-      </div>
       </div>
     );
   };
@@ -999,6 +999,9 @@ const MonthlyCalendar = () => {
             }
             onViewModeChange={setViewMode}
           />
+          <div className="ml-4">
+            <UserIcon />
+          </div>
         </div>
         
         <div className="flex-1 min-h-0 px-4 lg:px-8 pb-4 lg:pb-8 flex flex-col">
@@ -1134,9 +1137,9 @@ const MonthlyCalendar = () => {
                           )}
                           {todo.priority && (
                             <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                              todo.priority === "high" ? "bg-red-900 text-red-100" :
-                              todo.priority === "medium" ? "bg-yellow-900 text-yellow-100" :
-                              "bg-green-900 text-green-100"
+                              todo.priority === "high" ? "bg-red-100 text-red-800" :
+                              todo.priority === "medium" ? "bg-yellow-100 text-yellow-800" :
+                              "bg-green-100 text-green-800"
                             }`}>
                               {todo.priority}
                             </span>
@@ -1145,7 +1148,7 @@ const MonthlyCalendar = () => {
                       </div>
                       <button 
                         onClick={() => handleDeleteTodo(todo)}
-                        className="ml-2 text-gray-400 hover:text-red-400"
+                        className="ml-2 text-gray-400 hover:text-red-500"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

@@ -1,10 +1,24 @@
-import React from 'react';
-import MonthlyCalendar from './Components/MonthlyCalendar';
-import Welcomepage from './Components/Welcomepage';
-import AuthRedirect from './Components/AuthRedirect'; // ✅ Don't forget this!
-import { Routes, Route } from 'react-router-dom';
-
+// App.jsx
+import React, { useEffect } from "react";
+import MonthlyCalendar from "./Components/MonthlyCalendar";
+import Welcomepage from "./Components/Welcomepage";
+import AuthRedirect from "./Components/AuthRedirect";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { supabase } from "./Components/client";
+import './index.css';
 const App = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data?.session) {
+        navigate("/MonthlyCalendar");
+      }
+    };
+    checkSession();
+  }, [navigate]);
+
   return (
     <div className='h-screen w-screen'>
       <Routes>
@@ -12,7 +26,7 @@ const App = () => {
         <Route path='/MonthlyCalendar' element={<MonthlyCalendar />} />
       </Routes>
 
-      <AuthRedirect /> 
+      <AuthRedirect />
     </div>
   );
 };

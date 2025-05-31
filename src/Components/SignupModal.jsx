@@ -72,10 +72,17 @@ const SignupModal = ({ onClose, onSwitchToLogin }) => {
     setError(null);
     setLoading(true);
     try {
+      const redirectPath = `${window.location.origin}/FINAL-CALENDAR-V3/#/MonthlyCalendar`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
+        options: {
+          redirectTo: redirectPath,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
       });
-
       if (error) {
         setError(error.message);
       }
