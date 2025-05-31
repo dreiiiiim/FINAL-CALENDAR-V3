@@ -29,14 +29,20 @@ const LoginModal = ({ onClose, onSwitchToSignup }) => {
        });
 
        if (error) throw error;
+       
+       // Store the session in localStorage
+       if (data.session) {
+         localStorage.setItem('supabase.auth.token', JSON.stringify(data.session));
+       }
+       
        console.log('Logged in successfully:', data);
-    navigate('/MonthlyCalendar'); 
-  } catch (error) {
-    console.error('Error logging in:', error.message);
-    setError(error.message);
-  } finally {
-    setLoading(false);
-  }
+       navigate('/MonthlyCalendar');
+     } catch (error) {
+       console.error('Error logging in:', error.message);
+       setError(error.message);
+     } finally {
+       setLoading(false);
+     }
    }
    
    function handleChange(event) {
@@ -73,7 +79,7 @@ async function handleGoogleSignIn() {
   setLoading(true);
   try {
     const redirectPath = `${window.location.origin}/FINAL-CALENDAR-V3/#/MonthlyCalendar`;
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: redirectPath,
@@ -83,7 +89,13 @@ async function handleGoogleSignIn() {
         },
       },
     });
+
     if (error) throw error;
+    
+    // Store the session in localStorage if available
+    if (data?.session) {
+      localStorage.setItem('supabase.auth.token', JSON.stringify(data.session));
+    }
   } catch (err) {
     setError(err.message);
   } finally {
