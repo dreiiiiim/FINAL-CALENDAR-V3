@@ -15,11 +15,11 @@ const AuthRedirect = () => {
       if (event === "SIGNED_IN" && session) {
         // Store the session in localStorage
         localStorage.setItem('supabase.auth.token', JSON.stringify(session));
-        navigate("MonthlyCalendar");
+        navigate("/MonthlyCalendar");
       } else if (event === "SIGNED_OUT") {
         // Clear the session from localStorage
         localStorage.removeItem('supabase.auth.token');
-        navigate("");
+        navigate("/");
       }
     });
 
@@ -30,7 +30,7 @@ const AuthRedirect = () => {
       
       if (session) {
         localStorage.setItem('supabase.auth.token', JSON.stringify(session));
-        navigate("MonthlyCalendar");
+        navigate("/MonthlyCalendar");
       } else {
         // If no session, check localStorage
         const storedSession = localStorage.getItem('supabase.auth.token');
@@ -41,14 +41,14 @@ const AuthRedirect = () => {
             const { data: { user }, error } = await supabase.auth.getUser();
             if (error || !user) {
               localStorage.removeItem('supabase.auth.token');
-              navigate("");
+              navigate("/");
             } else {
-              navigate("MonthlyCalendar");
+              navigate("/MonthlyCalendar");
             }
           } catch (err) {
             console.error('Error parsing stored session:', err);
             localStorage.removeItem('supabase.auth.token');
-            navigate("");
+            navigate("/");
           }
         }
       }

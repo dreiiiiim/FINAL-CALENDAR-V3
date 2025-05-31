@@ -8,8 +8,8 @@ const App = () => {
   return (
     <div className='h-screen w-screen'>
       <Routes>
-        <Route path='' element={<Welcomepage />} />
-        <Route path='MonthlyCalendar' element={<MonthlyCalendar />} />
+        <Route path="/" element={<Welcomepage />} />
+        <Route path="/MonthlyCalendar" element={<MonthlyCalendar />} />
       </Routes>
 
       <AuthRedirect /> 
